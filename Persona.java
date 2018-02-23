@@ -19,6 +19,8 @@ public class Persona
     private int edad;
     // Indica la cantidad de calorias ingeridas
     private int caloriasIngeridas;
+    // Indica si puede comer mas o no
+    private int puedeComerMas;
     /**
      * Constructor for objects of class Persona
      */
@@ -29,6 +31,12 @@ public class Persona
         this.altura = altura;
         this.edad = edad;
         int caloriasIngeridas = 0;
+        if(hombre){
+            puedeComerMas = (peso*10)+(altura*6)+(edad*5)+5;
+        }
+        else{
+            puedeComerMas = (peso*10)+(altura*6)+(edad*5)-161;
+        }
     }
 
     /**
@@ -38,13 +46,13 @@ public class Persona
         int ingesta = -1;
         int caloriasComida = comida.getCalorias();
         if(hombre == true){
-            if ((peso*10)+(altura*6)+(edad*5)+5 >= caloriasIngeridas){
+            if (puedeComerMas >= caloriasIngeridas){
                 ingesta = comida.getCalorias();
                 caloriasIngeridas += ingesta;
             }
         }
         if(hombre != true){
-            if((peso*10)+(altura*6)+(edad*5)-161 >= caloriasIngeridas){
+            if(puedeComerMas >= caloriasIngeridas){
                 ingesta = comida.getCalorias();
                 caloriasIngeridas += ingesta;
             }
@@ -57,5 +65,30 @@ public class Persona
      */
     public int getCaloriasIngeridas(){
         return caloriasIngeridas;
+    }
+
+    /**
+     * Ahora queremos que sea posible preguntarle cosas a la persona.
+     * Si no ha sobrepasado su metabolismo basal,
+     * te contestará "SI" o "NO" (¡en mayúsculas!)
+     * dependiendo de si la pregunta tiene una longitud (es decir, el número de letras de la misma) divisible por 3 o no, respectivamente
+     * En caso de que la persona ya haya sobrepasado el metabolismo basal
+     * o en el caso de que tu pregunta contenga el nombre de la persona, responderá con la misma pregunta que le has hecho pero gritando
+     */
+    public String contestar(String pregunta){
+        String respuesta = "";
+        if(caloriasIngeridas >= puedeComerMas || pregunta.contains(nombre)){
+            respuesta = pregunta.toUpperCase();
+        }
+        else{
+            if(pregunta.length()% 3 == 0){
+                respuesta = "SI";
+            }
+            else{
+                respuesta = "NO";
+            }
+        }
+        System.out.println(respuesta);
+        return respuesta;
     }
 }
